@@ -1,5 +1,7 @@
 # Metabase
 
+A Reporting Tool
+
 
 ## Use PostgreSQL
 
@@ -19,8 +21,6 @@ postgres=#
 
 * See: https://metabase.com/docs/latest/operations-guide/configuring-application-database.html
 * See: https://metabase.com/docs/latest/operations-guide/migrating-from-h2.html
-
-
 
 
 ## Building from Source
@@ -45,4 +45,19 @@ postgres=#
     chmod 0755 ./lein
     export PATH="$PATH:$(readlink -f .)"
 
+
+## Database Connections
+
+https://github.com/metabase/metabase/issues/8679#issuecomment-783748133
+
+
+## Password Reset
+
+http://discourse.metabase.com/t/how-do-you-reset-a-users-password-without-an-email-service-configured-or-admin-access/395/2
+
+Get a current-ish timestamp.
+
+update core_user set reset_triggered = 1514706508, reset_token = 'AAA'  where id = 1;
+
+Then go to https://YOURHOSTNAME/auth/reset_password/YOURTOKEN
 
