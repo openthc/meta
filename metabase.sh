@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash
 #
 # Wrapper to Run Metabase
 # Had to find the MB_JETTY options from the source
@@ -29,6 +29,10 @@ export MB_DB_USER="metabase"
 export MB_DB_PASS="metabase"
 export MB_JETTY_HOST="127.0.0.1"
 export MB_JETTY_PORT="3000"
+
+# Metabase becomes inoperable, leaves too many hanging DB connections
+# @see https://github.com/metabase/metabase/issues/8679#issuecomment-1791553828
+#export MB_JDBC_DATA_WAREHOUSE_UNRETURNED_CONNECTION_TIMEOUT_SECONDS=1200
 
 # metabase_jar="/opt/metabase/source/target/uberjar/metabase.jar"
 # metabase_jar="0.34.3/metabase.jar"
