@@ -2,31 +2,38 @@
 
 A Reporting Tool
 
+## Docker Install
 
-## Use PostgreSQL
+### Prepare the PostgreSQL
 
-Just skip the H2 option, use PostgreSQL
-
-```
-postgres@meta:~$ psql
-psql (11.5 (Debian 11.5-1+deb10u1))
-Type "help" for help.
-
-postgres=# create user metabase;
-CREATE ROLE
-postgres=# create database metabase with owner metabase;
-CREATE DATABASE
-postgres=# alter user metabase with password '01DKM9K01DXPRGJY6A4VD6HPEW';
-ALTER ROLE
-postgres=# 
+```sql
+CREATE USER openthc_meta WITH ENCRYPTED PASSWORD 'openthc_meta';
+CREATE DATABASE openthc_meta with owner openthc_meta;
 ```
 
 * See: https://metabase.com/docs/latest/operations-guide/configuring-application-database.html
 * See: https://metabase.com/docs/latest/operations-guide/migrating-from-h2.html
 
-### Migrating from H2 to PostgreSQL
 
-* https://www.metabase.com/docs/latest/installation-and-operation/migrating-from-h2
+## Development
+
+To connect to a PostgreSQL that is running on the localhost, we have to do a trick.
+First create a special IP address on the loopback device.
+Then configure PostgreSQL to listen to that address and maybe update `/etc/hosts`
+Adjust the firewall to allow traffic to it as needed
+
+```shell
+iptables -t filter -I INPUT 4 -d 10.4.20.21/32 -j ACCEPT
+```
+
+Adjust the pg_hba to allow access from the docker images.
+
+```
+host      all      all      172.22.0.0/16      md5
+```
+
+- https://discourse.metabase.com/t/connect-to-my-local-postgres-database/90447
+- https://discourse.metabase.com/t/cant-connect-to-my-local-postgres-database/29272
 
 
 ## Building from Source
@@ -39,7 +46,6 @@ Building from source will require the latest versions of NodeJS and Yarn.
 curl -sL https://deb.nodesource.com/setup_11.x | bash -
 apt-get install -y nodejs
 ```
-
 
 ### Install Yarn
 
@@ -59,16 +65,18 @@ chmod 0755 ./lein
 export PATH="$PATH:$(readlink -f .)"
 ```
 
-## Database Connections
+## Notes
+
+### Database Connections
 
 Some times it can leave connections open for a long time?
 
 - https://github.com/metabase/metabase/issues/8679#issuecomment-783748133
 
 
-## Password Reset
+### Password Reset
 
-http://discourse.metabase.com/t/how-do-you-reset-a-users-password-without-an-email-service-configured-or-admin-access/395/2
+- http://discourse.metabase.com/t/how-do-you-reset-a-users-password-without-an-email-service-configured-or-admin-access/395/2
 
 Get a current-ish timestamp.
 
@@ -77,4 +85,3 @@ UPDATE core_user SET reset_triggered = 1514706508, reset_token = 'AAA'  where id
 ```
 
 Then go to https://YOURHOSTNAME/auth/reset_password/YOURTOKEN
-
