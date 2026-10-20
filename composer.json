@@ -2,15 +2,9 @@
 	"name": "openthc/meta",
 	"description": "OpenTHC Metabase Thing",
 	"license": "GPL-3.0-only",
-	"version": "420.25.112",
-	"autoload": {
-		"exclude-from-classmap": [
-			"vendor/erusev/parsedown-extra/test"
-		]
-	},
+	"version": "420.26.288",
 	"require": {
-		"openthc/common": "dev-main"
+		"openthc/common": "v2026.288.1"
 	},
-	"require-dev": {
-	}
+	"require-dev": {}
 }
